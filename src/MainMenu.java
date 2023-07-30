@@ -15,6 +15,8 @@ public class MainMenu extends JFrame{
 
     private ListBuku listBuku = new ListBuku();
 
+    private Peminjaman peminjaman = new Peminjaman();
+
     public void displayMainScreen(MainMenu screen) {
 
         screen.setContentPane(screen.mainPanel);
@@ -25,6 +27,7 @@ public class MainMenu extends JFrame{
         tombolInput();
         tombolCari();
         tombolList();
+        tombolPeminjaman();
     }
 
     public void tombolInput() {
@@ -54,6 +57,16 @@ public class MainMenu extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 dispose();
                 listBuku.display(listBuku);
+            }
+        });
+    }
+    public void tombolPeminjaman() {
+        peminjamanButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                peminjaman.display(peminjaman);
+                peminjaman.tombolPeminjamanBuku();
             }
         });
     }

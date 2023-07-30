@@ -1,5 +1,6 @@
 import java.sql.*;
 import javax.swing.*;
+import java.util.Calendar;
 
 /**
  * Class untuk manajemen database
@@ -81,6 +82,28 @@ public class DatabaseManager {
             preparedStatement.setString(6, lokasi);
             preparedStatement.setString(7, kode_buku);
             preparedStatement.setString(8, kategori);
+
+            int execute = preparedStatement.executeUpdate();
+            if (execute == 1) {
+                System.out.println("Upload sukses");
+            } else {
+                System.out.println("Upload gagal");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Upload gagal");
+            e.printStackTrace();
+        }
+    }
+
+    public void exportPeminjam(String judul, String peminjam, String petugas) {
+        Date currentDate = new Date(Calendar.getInstance().getTime().getTime());
+        try {
+            preparedStatement = connection.prepareStatement("INSERT INTO riwayat_peminjaman (`Judul`,`Peminjam`,`Petugas`,`Tanggal_Peminjaman`) VALUES (?,?,?,?)");
+            preparedStatement.setString(1, judul);
+            preparedStatement.setString(2, peminjam);
+            preparedStatement.setString(3,petugas);
+            preparedStatement.setDate(4,currentDate);
 
             int execute = preparedStatement.executeUpdate();
             if (execute == 1) {

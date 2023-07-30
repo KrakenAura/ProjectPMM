@@ -13,6 +13,8 @@ public class MainMenu extends JFrame{
     private InputBuku inputBuku = new InputBuku();
     private CariBuku cariBuku = new CariBuku();
 
+    private ListBuku listBuku = new ListBuku();
+
     public void displayMainScreen(MainMenu screen) {
 
         screen.setContentPane(screen.mainPanel);
@@ -22,6 +24,7 @@ public class MainMenu extends JFrame{
         screen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         tombolInput();
         tombolCari();
+        tombolList();
     }
 
     public void tombolInput() {
@@ -41,6 +44,16 @@ public class MainMenu extends JFrame{
                 dispose();
                 cariBuku.searchButton();
                 cariBuku.display(cariBuku);
+            }
+        });
+    }
+
+    public void tombolList() {
+        listBukuButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                listBuku.display(listBuku);
             }
         });
     }

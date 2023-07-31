@@ -60,6 +60,8 @@ public class DatabaseManager {
         }
     }
 
+
+
     /**
      * Method untuk memasukkan data buku kedalam database
      * @param judul
@@ -157,7 +159,7 @@ public class DatabaseManager {
      */
     public void hapusData (String target) {
         try {
-            preparedStatement = connection.prepareStatement("DELETE FROM databuku where `Judul Buku` = ?");
+            preparedStatement = connection.prepareStatement("DELETE FROM databuku where `Judul` = ?");
             preparedStatement.setString(1, target);
             int execute = preparedStatement.executeUpdate();
             if (execute == 1) {
@@ -170,5 +172,26 @@ public class DatabaseManager {
             System.out.println("Data tidak terhapus");
             e.printStackTrace();
         }
+    }
+    public void updatePeminjam(String target){
+        Date currentDate = new Date(Calendar.getInstance().getTime().getTime());
+        try {
+            preparedStatement = connection.prepareStatement("UPDATE riwayat_peminjaman SET `Tanggal_Pengembalian` = ? WHERE `Peminjam` = ?");
+            preparedStatement.setDate(1, currentDate);
+            preparedStatement.setString(2,target);
+
+            int execute = preparedStatement.executeUpdate();
+            if(execute == 1){
+                System.out.println("Data berhasil diinput");
+            }
+            else {
+                System.out.println("Data gagal diinput");
+            }
+
+        }catch (SQLException e){
+            System.out.println("Data gagal diinput");
+            e.printStackTrace();
+        }
+
     }
 }

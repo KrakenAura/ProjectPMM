@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -11,7 +10,7 @@ public class InputBuku extends JFrame{
     private JTextField fieldNomorRak;
     private JTextField fieldLokasi;
     private JTextField fieldKode;
-    private JTextField fieldKategori;
+    private JTextField fieldKategori1;
     private JButton inputButton;
     private JTextField fieldTahun;
     private JPanel InputBuku;
@@ -32,7 +31,7 @@ public class InputBuku extends JFrame{
                             fieldTahun.getText().isEmpty()||
                             fieldLokasi.getText().isEmpty()||
                             fieldKode.getText().isEmpty()||
-                            fieldKategori.getText().isEmpty();
+                            fieldKategori1.getText().isEmpty();
                     if (cekInput) {
                         throw new Exception("Mohon isi seluruh data yang valid");
                     }
@@ -45,7 +44,7 @@ public class InputBuku extends JFrame{
                     rak = fieldNomorRak.getText();
                     lokasi = fieldLokasi.getText();
                     kode = fieldKode.getText();
-                    kategori = fieldKategori.getText();
+                    kategori = fieldKategori1.getText();
                     databaseManager.exportData(judul, penerbit,penulis, tahun, rak, lokasi, kode,kategori);
 
                 } catch (Exception ex) {

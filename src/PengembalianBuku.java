@@ -8,38 +8,21 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Vector;
 
-public class PeminjamanBuku extends JFrame {
-    private JTextField fieldJudul;
-    private JButton cariButton;
+public class PengembalianBuku extends JFrame{
+    private JPanel pengembalianPanel;
+    private JTextField fieldCari;
     private JTable tabelBuku;
-    private JTextField fieldPeminjam;
-    private JButton SimpanButton;
-    private JButton KembaliButton;
-    private JPanel PeminjamanBuku;
-    private JTextField fieldPetugas;
-    private JTextField textField1;
-    private JTextField textField2;
+    private JButton kembalikanButton;
+    private JButton kembaliButton;
+    private JButton cariButton;
 
     DatabaseManager databaseManager = new DatabaseManager();
-
-    public void display(PeminjamanBuku screen) {
-        screen.setContentPane(PeminjamanBuku);
-        screen.setTitle("Manajemen Perpustakaan");
-        screen.setSize(800, 400);
-        screen.setVisible(true);
-        screen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        searchButton();
-        tombolKembali();
-        tombolSimpan();
-        databaseManager.connect();
-    }
-
 
     public void searchButton() {
         cariButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                fetchData(fieldJudul.getText());
+                fetchData(fieldCari.getText());
             }
         });
     }
@@ -58,7 +41,7 @@ public class PeminjamanBuku extends JFrame {
             tabelBuku.setModel(model); // Set the model to the JTable
             Object[] kolom = {"Judul Buku", "Penerbit Buku", "Penulis Buku", "Tahun Terbit", "Nomor Rak", "Lokasi Buku", "Kode Buku", "Kategori","QTY"};
             model.addRow(kolom);
-            PeminjamanBuku.BoldTableRowRenderer boldRenderer = new PeminjamanBuku.BoldTableRowRenderer();
+            BoldTableRowRenderer boldRenderer = new BoldTableRowRenderer();
             boldRenderer.setTargetRow(0); // Set the row index to be displayed in bold (0 for the first row)
             tabelBuku.setDefaultRenderer(Object.class, boldRenderer);
 
@@ -90,39 +73,26 @@ public class PeminjamanBuku extends JFrame {
             return c;
         }
     }
+
     public void tombolKembali(){
-        KembaliButton.addActionListener(new ActionListener() {
+        kembaliButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Peminjaman peminjaman = new Peminjaman();
+                MainMenu mainScreen = new MainMenu();
                 dispose();
-                peminjaman.display(peminjaman);
+                mainScreen.displayMainScreen(mainScreen);
             }
         });
     }
 
-    public void tombolSimpan(){
-        SimpanButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    boolean cekInput = fieldJudul.getText().isEmpty() ||
-                            fieldPeminjam.getText().isEmpty()||
-                            fieldPetugas.getText().isEmpty();
-                    if (cekInput) {
-                        throw new Exception("Mohon isi seluruh data yang valid");
-                    }
-                    String judul, peminjam,petugas;
-                    judul = fieldJudul.getText();
-                    peminjam = fieldPeminjam.getText();
-                    petugas = fieldPetugas.getText();
-                    databaseManager.exportPeminjam(judul, peminjam,petugas);
-
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, ex);
-                }
-            }
-        });
+    public void display(PengembalianBuku screen) {
+        tombolKembali();
+        searchButton();
+        screen.setContentPane(screen.pengembalianPanel);
+        screen.setTitle("Manajemen Perpustakaan");
+        screen.setSize(400, 400);
+        screen.setVisible(true);
+        screen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        databaseManager.connect();
     }
-
 }

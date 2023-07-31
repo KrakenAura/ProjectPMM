@@ -11,9 +11,11 @@ public class Peminjaman extends JFrame{
 
     private DatabaseManager databaseManager =  new DatabaseManager();
     private PeminjamanBuku peminjamanBuku = new PeminjamanBuku();
+    private PengembalianBuku pengembalianBuku = new PengembalianBuku();
 
     public void display(Peminjaman screen) {
         tombolKembali();
+        tombolPengembalianBuku();
         screen.setContentPane(Peminjaman);
         screen.setTitle("Manajemen Perpustakaan");
         screen.setSize(800, 400);
@@ -42,5 +44,14 @@ public class Peminjaman extends JFrame{
         });
     }
 
+    public void tombolPengembalianBuku(){
+       pengembalianBukuButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                pengembalianBuku.display(pengembalianBuku);
+            }
+        });
+    }
 
 }

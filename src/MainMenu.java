@@ -12,10 +12,9 @@ public class MainMenu extends JFrame{
 
     private InputBuku inputBuku = new InputBuku();
     private CariBuku cariBuku = new CariBuku();
-
     private ListBuku listBuku = new ListBuku();
-
     private Peminjaman peminjaman = new Peminjaman();
+    private  DeleteBuku deleteBuku = new DeleteBuku();
 
     public void displayMainScreen(MainMenu screen) {
 
@@ -28,6 +27,7 @@ public class MainMenu extends JFrame{
         tombolCari();
         tombolList();
         tombolPeminjaman();
+        tombolDelete();
     }
 
     public void tombolInput() {
@@ -67,6 +67,16 @@ public class MainMenu extends JFrame{
                 dispose();
                 peminjaman.display(peminjaman);
                 peminjaman.tombolPeminjamanBuku();
+            }
+        });
+    }
+    public void tombolDelete() {
+        hapusBukuButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                deleteBuku.deleteButton();
+                deleteBuku.display(deleteBuku);
             }
         });
     }

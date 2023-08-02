@@ -13,9 +13,12 @@ public class Peminjaman extends JFrame{
     private PeminjamanBuku peminjamanBuku = new PeminjamanBuku();
     private PengembalianBuku pengembalianBuku = new PengembalianBuku();
 
+    private RiwayatPeminjaman riwayatPeminjaman = new RiwayatPeminjaman();
+
     public void display(Peminjaman screen) {
         tombolKembali();
         tombolPengembalianBuku();
+        tombolRiwayat();
         screen.setContentPane(Peminjaman);
         screen.setTitle("Manajemen Perpustakaan");
         screen.setSize(800, 400);
@@ -54,4 +57,13 @@ public class Peminjaman extends JFrame{
         });
     }
 
+    public void tombolRiwayat(){
+        riwayatButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                riwayatPeminjaman.display(riwayatPeminjaman);
+            }
+        });
+    }
 }

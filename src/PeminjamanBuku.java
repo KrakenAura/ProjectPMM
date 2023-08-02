@@ -9,16 +9,17 @@ import java.sql.SQLException;
 import java.util.Vector;
 
 public class PeminjamanBuku extends JFrame {
-    private JTextField fieldJudul;
     private JButton cariButton;
+
+    private JTextField fieldJudul;
     private JTable tabelBuku;
     private JTextField fieldPeminjam;
     private JButton SimpanButton;
     private JButton KembaliButton;
     private JPanel PeminjamanBuku;
     private JTextField fieldPetugas;
-    private JTextField textField1;
-    private JTextField textField2;
+    private JTextField fieldKelas;
+    private JTextField fieldID;
 
     DatabaseManager databaseManager = new DatabaseManager();
 
@@ -47,7 +48,7 @@ public class PeminjamanBuku extends JFrame {
     public void fetchData(String judulBuku) {
         try {
             int columnCount;
-            Object[] columnTitle = {"Judul Buku", "Penerbit Buku", "Penulis Buku", "Tahun Terbit", "Nomor Rak", "Lokasi Buku", "Kode Buku", "Kategori","QTY"};
+            Object[] columnTitle = {"ID","Judul Buku", "Penerbit Buku", "Penulis Buku", "Tahun Terbit", "Nomor Rak", "Lokasi Buku", "Kode Buku", "Kategori","QTY"};
             databaseManager.setPreparedStatement(databaseManager.getConnection().prepareStatement("SELECT * FROM databuku WHERE `Judul` = ?"));
             databaseManager.getPreparedStatement().setString(1, judulBuku);
             databaseManager.setResultSet(databaseManager.getPreparedStatement().executeQuery());
@@ -56,7 +57,7 @@ public class PeminjamanBuku extends JFrame {
 
             DefaultTableModel model = new DefaultTableModel(null, columnTitle);
             tabelBuku.setModel(model); // Set the model to the JTable
-            Object[] kolom = {"Judul Buku", "Penerbit Buku", "Penulis Buku", "Tahun Terbit", "Nomor Rak", "Lokasi Buku", "Kode Buku", "Kategori","QTY"};
+            Object[] kolom = {"ID","Judul Buku", "Penerbit Buku", "Penulis Buku", "Tahun Terbit", "Nomor Rak", "Lokasi Buku", "Kode Buku", "Kategori","QTY"};
             model.addRow(kolom);
             PeminjamanBuku.BoldTableRowRenderer boldRenderer = new PeminjamanBuku.BoldTableRowRenderer();
             boldRenderer.setTargetRow(0); // Set the row index to be displayed in bold (0 for the first row)
@@ -106,17 +107,19 @@ public class PeminjamanBuku extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    boolean cekInput = fieldJudul.getText().isEmpty() ||
-                            fieldPeminjam.getText().isEmpty()||
-                            fieldPetugas.getText().isEmpty();
+                    boolean cekInput = fieldPeminjam.getText().isEmpty()||
+                            fieldKelas.getText().isEmpty()||
+                            fieldPetugas.getText().isEmpty()||
+                            fieldID.getText().isEmpty();
                     if (cekInput) {
                         throw new Exception("Mohon isi seluruh data yang valid");
                     }
-                    String judul, peminjam,petugas;
-                    judul = fieldJudul.getText();
+                    String peminjam, kelas,petugas,id;
                     peminjam = fieldPeminjam.getText();
+                    kelas = fieldKelas.getText();
                     petugas = fieldPetugas.getText();
-                    databaseManager.exportPeminjam(judul, peminjam,petugas);
+                    id = fieldID.getText();
+                    databaseManager.exportPeminjam(peminjam,kelas,petugas,id);
 
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, ex);

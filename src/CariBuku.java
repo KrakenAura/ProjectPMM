@@ -51,7 +51,7 @@ public class CariBuku extends JFrame{
     public void fetchData(String judulBuku) {
         try {
             int columnCount;
-            Object[] columnTitle = {"Judul Buku", "Penerbit Buku", "Penulis Buku", "Tahun Terbit", "Nomor Rak", "Lokasi Buku", "Kode Buku", "Kategori","QTY"};
+            Object[] columnTitle = {"ID","Judul Buku", "Penerbit Buku", "Penulis Buku", "Tahun Terbit", "Nomor Rak", "Lokasi Buku", "Kode Buku", "Kategori","QTY"};
             databaseManager.setPreparedStatement(databaseManager.getConnection().prepareStatement("SELECT * FROM databuku WHERE `Judul` = ?"));
             databaseManager.getPreparedStatement().setString(1, judulBuku);
             databaseManager.setResultSet(databaseManager.getPreparedStatement().executeQuery());
@@ -60,7 +60,7 @@ public class CariBuku extends JFrame{
 
             DefaultTableModel model = new DefaultTableModel(null, columnTitle);
             tabelBuku.setModel(model); // Set the model to the JTable
-            Object[] kolom = {"Judul Buku", "Penerbit Buku", "Penulis Buku", "Tahun Terbit", "Nomor Rak", "Lokasi Buku", "Kode Buku", "Kategori","QTY"};
+            Object[] kolom = {"ID","Judul Buku", "Penerbit Buku", "Penulis Buku", "Tahun Terbit", "Nomor Rak", "Lokasi Buku", "Kode Buku", "Kategori","QTY"};
             model.addRow(kolom);
             BoldTableRowRenderer boldRenderer = new BoldTableRowRenderer();
             boldRenderer.setTargetRow(0); // Set the row index to be displayed in bold (0 for the first row)

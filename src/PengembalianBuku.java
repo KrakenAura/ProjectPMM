@@ -15,6 +15,7 @@ public class PengembalianBuku extends JFrame{
     private JButton kembalikanButton;
     private JButton kembaliButton;
     private JButton cariButton;
+    private JTextField fieldID;
 
     DatabaseManager databaseManager = new DatabaseManager();
 
@@ -27,19 +28,19 @@ public class PengembalianBuku extends JFrame{
         });
     }
 
-    public void fetchData(String judulBuku) {
+    public void fetchData(String namapeminjam) {
         try {
             int columnCount;
-            Object[] columnTitle = {"Judul Buku", "Penerbit Buku", "Penulis Buku", "Tahun Terbit", "Nomor Rak", "Lokasi Buku", "Kode Buku", "Kategori","QTY"};
-            databaseManager.setPreparedStatement(databaseManager.getConnection().prepareStatement("SELECT * FROM databuku WHERE `Judul` = ?"));
-            databaseManager.getPreparedStatement().setString(1, judulBuku);
+            Object[] columnTitle = {"ID Riwayat", "Nama Peminjam", "Kelas", "Nama Petugas", "Tanggal Peminjaman", "Tanggal Pengembalian", "ID Buku"};
+            databaseManager.setPreparedStatement(databaseManager.getConnection().prepareStatement("SELECT * FROM riwayat_peminjaman WHERE namapeminjam = ?"));
+            databaseManager.getPreparedStatement().setString(1, namapeminjam);
             databaseManager.setResultSet(databaseManager.getPreparedStatement().executeQuery());
             ResultSetMetaData metaData = databaseManager.getResultSet().getMetaData();
             columnCount = metaData.getColumnCount();
 
             DefaultTableModel model = new DefaultTableModel(null, columnTitle);
             tabelBuku.setModel(model); // Set the model to the JTable
-            Object[] kolom = {"Judul Buku", "Penerbit Buku", "Penulis Buku", "Tahun Terbit", "Nomor Rak", "Lokasi Buku", "Kode Buku", "Kategori","QTY"};
+            Object[] kolom = {"ID Riwayat", "Nama Peminjam", "Kelas", "Nama Petugas", "Tanggal Peminjaman", "Tanggal Pengembalian", "ID Buku"};
             model.addRow(kolom);
             BoldTableRowRenderer boldRenderer = new BoldTableRowRenderer();
             boldRenderer.setTargetRow(0); // Set the row index to be displayed in bold (0 for the first row)
@@ -88,11 +89,33 @@ public class PengembalianBuku extends JFrame{
     public void display(PengembalianBuku screen) {
         tombolKembali();
         searchButton();
+        tombolReturn();
         screen.setContentPane(screen.pengembalianPanel);
         screen.setTitle("Manajemen Perpustakaan");
-        screen.setSize(400, 400);
+        screen.setSize(800, 400);
         screen.setVisible(true);
         screen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         databaseManager.connect();
+    }
+
+    public void tombolReturn(){
+        kembalikanButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    boolean cekInput =
+                            fieldID.getText().isEmpty();
+                    if (cekInput) {
+                        throw new Exception("Mohon isi seluruh data yang valid");
+                    }
+
+                    String id = fieldID.getText();
+                    databaseManager.updatePengembalian(id);
+
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, ex);
+                }
+            }
+        });
     }
 }

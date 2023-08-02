@@ -8,73 +8,27 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Vector;
 
-public class DeleteBuku extends JFrame{
-    private JTextField fieldCari;
+public class RiwayatPeminjaman extends JFrame {
     private JTable tabelBuku;
-    private JButton hapusButton;
+    private JPanel riwayatPanel;
     private JButton kembaliButton;
-    private JPanel deletePanel;
-    private JButton cariButton;
 
     DatabaseManager databaseManager = new DatabaseManager();
 
-    public void display(DeleteBuku screen) {
-        deleteButton();
-        tombolKembali();
-        searchButton();
-        screen.setContentPane(screen.deletePanel);
-        screen.setTitle("Manajemen Perpustakaan");
-        screen.setSize(800, 400);
-        screen.setVisible(true);
-        screen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        databaseManager.connect();
-    }
-
-    public void deleteButton () {
-        hapusButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String judulBuku = fieldCari.getText();
-                databaseManager.hapusData(judulBuku);
-            }
-        });
-    }
-
-    public void tombolKembali(){
-        kembaliButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MainMenu mainScreen = new MainMenu();
-                dispose();
-                mainScreen.displayMainScreen(mainScreen);
-            }
-        });
-    }
-
-    public void searchButton() {
-        cariButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                fetchData(fieldCari.getText());
-            }
-        });
-    }
-
-    public void fetchData(String judulBuku) {
+    public void fetchData() {
         try {
             int columnCount;
-            Object[] columnTitle = {"ID","Judul Buku", "Penerbit Buku", "Penulis Buku", "Tahun Terbit", "Nomor Rak", "Lokasi Buku", "Kode Buku", "Kategori","QTY"};
-            databaseManager.setPreparedStatement(databaseManager.getConnection().prepareStatement("SELECT * FROM databuku WHERE `Judul` = ?"));
-            databaseManager.getPreparedStatement().setString(1, judulBuku);
+            Object[] columnTitle = {"ID Riwayat", "Nama Peminjam", "Kelas", "Nama Petugas", "Tanggal Peminjaman", "Tanggal Pengembalian", "ID Buku"};
+            databaseManager.setPreparedStatement(databaseManager.getConnection().prepareStatement("SELECT * FROM riwayat_peminjaman"));
             databaseManager.setResultSet(databaseManager.getPreparedStatement().executeQuery());
             ResultSetMetaData metaData = databaseManager.getResultSet().getMetaData();
             columnCount = metaData.getColumnCount();
 
             DefaultTableModel model = new DefaultTableModel(null, columnTitle);
             tabelBuku.setModel(model); // Set the model to the JTable
-            Object[] kolom = {"ID","Judul Buku", "Penerbit Buku", "Penulis Buku", "Tahun Terbit", "Nomor Rak", "Lokasi Buku", "Kode Buku", "Kategori","QTY"};
+            Object[] kolom = {"ID Riwayat", "Nama Peminjam", "Kelas", "Nama Petugas", "Tanggal Peminjaman", "Tanggal Pengembalian", "ID Buku"};
             model.addRow(kolom);
-            DeleteBuku.BoldTableRowRenderer boldRenderer = new DeleteBuku.BoldTableRowRenderer();
+            RiwayatPeminjaman.BoldTableRowRenderer boldRenderer = new RiwayatPeminjaman.BoldTableRowRenderer();
             boldRenderer.setTargetRow(0); // Set the row index to be displayed in bold (0 for the first row)
             tabelBuku.setDefaultRenderer(Object.class, boldRenderer);
 
@@ -89,6 +43,7 @@ public class DeleteBuku extends JFrame{
             e.printStackTrace();
         }
     }
+
     public class BoldTableRowRenderer extends DefaultTableCellRenderer {
         private int targetRow; // The row index to be displayed in bold
 
@@ -105,5 +60,27 @@ public class DeleteBuku extends JFrame{
             }
             return c;
         }
+    }
+
+    public void display(RiwayatPeminjaman screen) {
+        screen.setContentPane(riwayatPanel);
+        screen.setTitle("Manajemen Perpustakaan");
+        screen.setSize(800, 400);
+        screen.setVisible(true);
+        screen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        databaseManager.connect();
+        fetchData();
+        tombolKembali();
+    }
+
+    public void tombolKembali(){
+        kembaliButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Peminjaman peminjaman = new Peminjaman();
+                dispose();
+                peminjaman.display(peminjaman);
+            }
+        });
     }
 }

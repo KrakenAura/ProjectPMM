@@ -24,6 +24,7 @@ public class PengembalianBuku extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 fetchData(fieldCari.getText());
+                tabelBuku.setVisible(true);
             }
         });
     }
@@ -79,9 +80,9 @@ public class PengembalianBuku extends JFrame{
         kembaliButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MainMenu mainScreen = new MainMenu();
+                Peminjaman peminjaman = new Peminjaman();
                 dispose();
-                mainScreen.displayMainScreen(mainScreen);
+                peminjaman.display(peminjaman);
             }
         });
     }
@@ -96,6 +97,7 @@ public class PengembalianBuku extends JFrame{
         screen.setVisible(true);
         screen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         databaseManager.connect();
+        tabelBuku.setVisible(false);
     }
 
     public void tombolReturn(){

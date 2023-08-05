@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ProjectPMM:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ProjectPMM_jar</output-path>
+    <root id="archive" name="ProjectPMM.jar">
+      <element id="module-output" name="ProjectPMM" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/mysql-connector-j-8.0.31.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

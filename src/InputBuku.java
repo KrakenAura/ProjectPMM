@@ -49,6 +49,9 @@ public class InputBuku extends JFrame{
                     kategori = fieldKategori.getText();
                     int qty = Integer.parseInt(fieldQty.getText());
                     databaseManager.exportData(judul, penerbit,penulis, tahun, rak, lokasi, kode,kategori,qty);
+                    MainMenu mainScreen = new MainMenu();
+                    dispose();
+                    mainScreen.displayMainScreen(mainScreen);
 
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, ex);
@@ -75,5 +78,6 @@ public class InputBuku extends JFrame{
             }
         });
     }
+
 
 }

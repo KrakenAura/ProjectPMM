@@ -33,6 +33,7 @@ public class PeminjamanBuku extends JFrame {
         tombolKembali();
         tombolSimpan();
         databaseManager.connect();
+        tabelBuku.setVisible(false);
     }
 
 
@@ -41,6 +42,7 @@ public class PeminjamanBuku extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 fetchData(fieldJudul.getText());
+                tabelBuku.setVisible(true);
             }
         });
     }

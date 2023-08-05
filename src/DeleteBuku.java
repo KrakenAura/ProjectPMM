@@ -15,6 +15,7 @@ public class DeleteBuku extends JFrame{
     private JButton kembaliButton;
     private JPanel deletePanel;
     private JButton cariButton;
+    private JTextField fieldHapus;
 
     DatabaseManager databaseManager = new DatabaseManager();
 
@@ -28,14 +29,16 @@ public class DeleteBuku extends JFrame{
         screen.setVisible(true);
         screen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         databaseManager.connect();
+        tabelBuku.setVisible(false);
+        hapusButton.setVisible(false);
     }
 
     public void deleteButton () {
         hapusButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String judulBuku = fieldCari.getText();
-                databaseManager.hapusData(judulBuku);
+                String bookID = fieldHapus.getText();
+                databaseManager.hapusData(bookID);
             }
         });
     }
@@ -56,6 +59,8 @@ public class DeleteBuku extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 fetchData(fieldCari.getText());
+                tabelBuku.setVisible(true);
+                hapusButton.setVisible(true);
             }
         });
     }

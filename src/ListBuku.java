@@ -71,6 +71,7 @@ public class ListBuku extends JFrame{
         screen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         databaseManager.connect();
         fetchData();
+
     }
 
     public void tombolKembali(){

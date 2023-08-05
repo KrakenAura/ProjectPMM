@@ -139,11 +139,16 @@ public class DatabaseManager {
 
             if (resultSet.next()) {
                 String lastID = resultSet.getString("max_id");
-                int numericPart = Integer.parseInt(lastID.substring(4));
-                numericPart++;
-                nextID = "BOOK" + String.format("%03d", numericPart);
+                if (lastID != null) {
+                    int numericPart = Integer.parseInt(lastID.substring(4));
+                    numericPart++;
+                    nextID = "BOOK" + String.format("%03d", numericPart);
+                } else {
+                    // If the 'databuku' table is empty, start with 'BOOK001'
+                    nextID = "BOOK001";
+                }
             } else {
-                // If the 'databuku' table is empty, start with 'HIS001'
+                // If there are no rows in the result, start with 'BOOK001'
                 nextID = "BOOK001";
             }
         } catch (SQLException e) {
@@ -152,6 +157,7 @@ public class DatabaseManager {
         }
         return nextID;
     }
+
 
 
 //    public void exportPeminjam(String judul, String peminjam, String petugas) {
@@ -235,11 +241,16 @@ public class DatabaseManager {
 
             if (resultSet.next()) {
                 String lastID = resultSet.getString("max_id");
-                int numericPart = Integer.parseInt(lastID.substring(4));
-                numericPart++;
-                nextID = "HIS" + String.format("%03d", numericPart);
+                if (lastID != null) {
+                    int numericPart = Integer.parseInt(lastID.substring(4));
+                    numericPart++;
+                    nextID = "HIS" + String.format("%03d", numericPart);
+                } else {
+                    // If the 'databuku' table is empty, start with 'BOOK001'
+                    nextID = "HIS001";
+                }
             } else {
-                // If the 'databuku' table is empty, start with 'HIS001'
+                // If there are no rows in the result, start with 'BOOK001'
                 nextID = "HIS001";
             }
         } catch (SQLException e) {

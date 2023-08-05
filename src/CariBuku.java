@@ -26,6 +26,7 @@ public class CariBuku extends JFrame{
         screen.setVisible(true);
         screen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         databaseManager.connect();
+        tabelBuku.setVisible(false);
     }
 
     public void tombolKembali(){
@@ -44,16 +45,28 @@ public class CariBuku extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 fetchData(fieldJudul.getText());
+                tabelBuku.setVisible(true);
             }
         });
+
+
     }
 
     public void fetchData(String judulBuku) {
         try {
             int columnCount;
             Object[] columnTitle = {"ID","Judul Buku", "Penerbit Buku", "Penulis Buku", "Tahun Terbit", "Nomor Rak", "Lokasi Buku", "Kode Buku", "Kategori","QTY"};
-            databaseManager.setPreparedStatement(databaseManager.getConnection().prepareStatement("SELECT * FROM databuku WHERE `Judul` = ?"));
+            databaseManager.setPreparedStatement(databaseManager.getConnection().prepareStatement("SELECT * FROM databuku WHERE `Judul` LIKE CONCAT('%', ?, '%') OR `id` LIKE CONCAT('%', ?, '%') OR `penerbit` LIKE CONCAT('%', ?, '%') OR `penulis` LIKE CONCAT('%', ?, '%') OR `tahunterbit` LIKE CONCAT('%', ?, '%') OR `nomorrak` LIKE CONCAT('%', ?, '%') OR `lokasi` LIKE CONCAT('%', ?, '%') OR `kodebuku` LIKE CONCAT('%', ?, '%') OR `kategori` LIKE CONCAT('%', ?, '%')"));
             databaseManager.getPreparedStatement().setString(1, judulBuku);
+            databaseManager.getPreparedStatement().setString(2, judulBuku);
+            databaseManager.getPreparedStatement().setString(3, judulBuku);
+            databaseManager.getPreparedStatement().setString(4, judulBuku);
+            databaseManager.getPreparedStatement().setString(5, judulBuku);
+            databaseManager.getPreparedStatement().setString(6, judulBuku);
+            databaseManager.getPreparedStatement().setString(7, judulBuku);
+            databaseManager.getPreparedStatement().setString(8, judulBuku);
+            databaseManager.getPreparedStatement().setString(9, judulBuku);
+
             databaseManager.setResultSet(databaseManager.getPreparedStatement().executeQuery());
             ResultSetMetaData metaData = databaseManager.getResultSet().getMetaData();
             columnCount = metaData.getColumnCount();

@@ -119,7 +119,7 @@ public class DatabaseManager {
 
             int execute = preparedStatement.executeUpdate();
             if (execute == 1) {
-                System.out.println("Upload sukses");
+                JOptionPane.showMessageDialog(null, "Upload sukses", "Notifikasi", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 System.out.println("Upload gagal");
             }

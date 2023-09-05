@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Vector;
-import javax.swing.table.DefaultTableCellRenderer;
 
 public class CariBuku extends JFrame{
     private JTextField fieldJudul;

@@ -73,33 +73,6 @@ public class DatabaseManager {
      * @param kode_buku
      * @param kategori
      */
-//    public void exportData(String judul, String penerbit, String penulis, String tahun_terbit, String rak, String lokasi, String kode_buku, String kategori, Integer qty) {
-//        try {
-//            preparedStatement = connection.prepareStatement("INSERT INTO databuku (`id`,`Judul`,`Penerbit`,`Penulis`,`Tahun_Terbit`,`Nomor_Rak`,`Lokasi`,`Kode_Buku`,`Kategori`,`qty`) VALUES (?,?,?,?,?,?,?,?,?,?)");
-//            preparedStatement.setString(1,id);
-//            preparedStatement.setString(2, judul);
-//            preparedStatement.setString(3, penerbit);
-//            preparedStatement.setString(4, penulis);
-//            preparedStatement.setString(5, tahun_terbit);
-//            preparedStatement.setString(6, rak);
-//            preparedStatement.setString(7, lokasi);
-//            preparedStatement.setString(8, kode_buku);
-//            preparedStatement.setString(9, kategori);
-//            preparedStatement.setInt(10,qty);
-//
-//            int execute = preparedStatement.executeUpdate();
-//            if (execute == 1) {
-//                System.out.println("Upload sukses");
-//            } else {
-//                System.out.println("Upload gagal");
-//            }
-//
-//        } catch (SQLException e) {
-//            System.out.println("Upload gagal");
-//            e.printStackTrace();
-//        }
-//    }
-
     public void exportData(String judul, String penerbit, String penulis, String tahun_terbit, String rak, String lokasi, String kode_buku, String kategori, Integer qty) {
         try {
             // Generate the next book title (id) in the format "BOOK1", "BOOK2", etc.
@@ -121,7 +94,7 @@ public class DatabaseManager {
             if (execute == 1) {
                 JOptionPane.showMessageDialog(null, "Upload sukses", "Notifikasi", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                System.out.println("Upload gagal");
+                JOptionPane.showMessageDialog(null, "Upload gagal", "Notifikasi", JOptionPane.INFORMATION_MESSAGE);
             }
 
         } catch (SQLException e) {
@@ -159,30 +132,7 @@ public class DatabaseManager {
     }
 
 
-
-//    public void exportPeminjam(String judul, String peminjam, String petugas) {
-//        Date currentDate = new Date(Calendar.getInstance().getTime().getTime());
-//        try {
-//            preparedStatement = connection.prepareStatement("INSERT INTO riwayat_peminjaman (`Judul`,`Peminjam`,`Petugas`,`Tanggal_Peminjaman`) VALUES (?,?,?,?)");
-//            preparedStatement.setString(1, judul);
-//            preparedStatement.setString(2, peminjam);
-//            preparedStatement.setString(3,petugas);
-//            preparedStatement.setDate(4,currentDate);
-//
-//            int execute = preparedStatement.executeUpdate();
-//            if (execute == 1) {
-//                System.out.println("Upload sukses");
-//            } else {
-//                System.out.println("Upload gagal");
-//            }
-//
-//        } catch (SQLException e) {
-//            System.out.println("Upload gagal");
-//            e.printStackTrace();
-//        }
-//    }
-
-    public void exportPeminjam(String peminjam, String kelas, String petugas, String ID) {
+    public void exportPeminjam(String peminjam, String kelas, String petugas, String idBuku) {
         Date currentDate = new Date(Calendar.getInstance().getTime().getTime());
         try {
             // Generate the next ID in the format "HIS001", "HIS002", etc.
@@ -191,19 +141,19 @@ public class DatabaseManager {
             preparedStatement = connection.prepareStatement("INSERT INTO riwayat_peminjaman (`id`, `namapeminjam`, `kelas`, `namapetugas`, `tanggalpeminjaman`, `tanggalpengembalian`, `databuku_id`) VALUES (?, ?, ?, ?, ?, ?, ?)");
             preparedStatement.setString(1, id);
             preparedStatement.setString(2, peminjam);
-            preparedStatement.setString(3, kelas); // Set the default value for 'kelas' (assuming it's an integer column)
+            preparedStatement.setString(3, kelas);
             preparedStatement.setString(4, petugas);
             preparedStatement.setDate(5, currentDate);
-            preparedStatement.setNull(6, Types.DATE); // Set 'tanggalpengembalian' to NULL
-            preparedStatement.setString(7, ID); // Assuming 'judul' is the book ID or a reference to the book
+            preparedStatement.setNull(6, Types.DATE);
+            preparedStatement.setString(7, idBuku);
 
             int execute = preparedStatement.executeUpdate();
             if (execute == 1) {
-                System.out.println("Upload sukses");
+                JOptionPane.showMessageDialog(null, "Upload sukses", "Notifikasi", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                System.out.println("Upload gagal");
+                JOptionPane.showMessageDialog(null, "Upload gagal", "Notifikasi", JOptionPane.INFORMATION_MESSAGE);
             }
-            updateQtyInDatabuku(ID,-1);
+            updateQtyInDatabuku(idBuku,-1);
 
 
         } catch (SQLException e) {
@@ -219,9 +169,9 @@ public class DatabaseManager {
             preparedStatement.setString(2, id);
             int execute = preparedStatement.executeUpdate();
             if (execute == 1) {
-                System.out.println("Upload sukses");
+                JOptionPane.showMessageDialog(null, "Upload sukses", "Notifikasi", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                System.out.println("Upload gagal");
+                JOptionPane.showMessageDialog(null, "Upload gagal", "Notifikasi", JOptionPane.INFORMATION_MESSAGE);
             }
         }catch (SQLException e){
             System.out.println("Upload gagal");
@@ -236,21 +186,31 @@ public class DatabaseManager {
         String nextID = null;
         try {
             // Fetch the maximum ID from the 'databuku' table
-            preparedStatement = connection.prepareStatement("SELECT MAX(id) AS max_id FROM databuku");
+            preparedStatement = connection.prepareStatement("SELECT MAX(id) AS max_id FROM riwayat_peminjaman");
             resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
                 String lastID = resultSet.getString("max_id");
                 if (lastID != null) {
-                    int numericPart = Integer.parseInt(lastID.substring(4));
-                    numericPart++;
-                    nextID = "HIS" + String.format("%03d", numericPart);
+                    int numericPart = Integer.parseInt(lastID.substring(3)); // Remove the prefix "HIS"
+                    numericPart++; // Increment the numeric part
+
+                    // Format the numeric part with leading zeros
+                    String formattedNumericPart = String.format("%03d", numericPart);
+
+                    // Ensure it doesn't exceed three digits, e.g., "999"
+                    if (formattedNumericPart.length() <= 3) {
+                        nextID = "HIS" + formattedNumericPart;
+                    } else {
+                        // Handle the case where the numeric part rolls over to "001" after reaching "999"
+                        nextID = "HIS001";
+                    }
                 } else {
-                    // If the 'databuku' table is empty, start with 'BOOK001'
+                    // If the 'databuku' table is empty, start with 'HIS001'
                     nextID = "HIS001";
                 }
             } else {
-                // If there are no rows in the result, start with 'BOOK001'
+                // If there are no rows in the result, start with 'HIS001'
                 nextID = "HIS001";
             }
         } catch (SQLException e) {
@@ -259,6 +219,7 @@ public class DatabaseManager {
         }
         return nextID;
     }
+
 
 
 
@@ -317,19 +278,20 @@ public class DatabaseManager {
      * Method untuk menghapus data buku di database berdasarkan pencarian pengguna
      * @param target
      */
-    public void hapusData (String target) {
+    public void hapusData(String target) {
         try {
-            preparedStatement = connection.prepareStatement("DELETE FROM databuku where `Judul` = ?");
+            System.out.println("Deleting data with bookID: " + target);
+            preparedStatement = connection.prepareStatement("DELETE FROM databuku WHERE `id` = ?");
             preparedStatement.setString(1, target);
+            System.out.println("SQL Query: " + preparedStatement.toString()); // Print the SQL query being executed (for debugging)
             int execute = preparedStatement.executeUpdate();
             if (execute == 1) {
-                System.out.println("Data berhasil dihapus");
-            }
-            else {
-                System.out.println("Data tidak terhapus");
+                JOptionPane.showMessageDialog(null, "Data berhasil dihapus", "Notifikasi", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Data gagal dihapus", "Notifikasi", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (SQLException e) {
-            System.out.println("Data tidak terhapus");
+            System.err.println("Error deleting data: " + e.getMessage());
             e.printStackTrace();
         }
     }
